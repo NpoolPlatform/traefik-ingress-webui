@@ -1,6 +1,7 @@
-FROM centos:7
+FROM centos:centos7
 
-RUN yum install nginx
+RUN yum update -y
+RUN yum install nginx -y
 
 RUN mkdir -p /usr/share/nginx/html/traefik/dashboard
 COPY static/ /usr/share/nginx/html/traefik/dashboard
