@@ -1,3 +1,6 @@
 FROM nginx:1.21.3
-COPY static/ /usr/share/nginx/html
+RUN mkdir -p /usr/share/nginx/html/traefik
+COPY static/ /usr/share/nginx/html/traefik
+RUN rm -rf /usr/share/nginx/html/index.html
+RUN ln -s /usr/share/nginx/html/traefik/index.html /usr/share/nginx/html/index.html
 EXPOSE 80

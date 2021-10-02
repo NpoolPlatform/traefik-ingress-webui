@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`sc-sh-development.npool.top`) && PathPrefix(`/notls`)
+  - match: Host(`internal-devops.npool.top`) && PathPrefix(`/notls`)
     kind: Rule
     services:
     - name: whoami
@@ -23,10 +23,28 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`sc-sh-development.npool.top`) && PathPrefix(`/tls`)
+  - match: Host(`internal-devops.npool.top`) && PathPrefix(`/tls`)
     kind: Rule
     services:
     - name: whoami
       port: 80
+  tls:
+    certResolver: myresolver
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroutetls
+  namespace: kube-system
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`internal-devops.npool.top`) && PathPrefix(`/traefik/api`)
+    kind: Rule
+    services:
+    - name: traefik
+      port: 8080
   tls:
     certResolver: myresolver
