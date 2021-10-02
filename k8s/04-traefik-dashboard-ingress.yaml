@@ -1,20 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: traefik-admin-ingress
+  name: traefik-webui-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: traefik-admin
-    k8s.kuboard.cn/workload: traefik-admin
+    k8s.kuboard.cn/displayName: traefik-webui
+    k8s.kuboard.cn/workload: traefik-webui
     nginx.com/sticky-cookie-services: "serviceName=traefik-admin srv_id expires=1h path=/"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - host: internal-devops.npool.top
     http:
       paths:
-      - path: /traefik/dashboard(/|$)(.*)
+      - path: /traefik/dashboard
         backend:
           serviceName: traefik-webui
           servicePort: 80

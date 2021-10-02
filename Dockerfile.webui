@@ -1,6 +1,7 @@
-FROM nginx:1.21.3
-RUN mkdir -p /usr/share/nginx/html/traefik
-COPY static/ /usr/share/nginx/html/traefik
+FROM centos:7
+RUN mkdir -p /usr/share/nginx/html/traefik/dashboard
+COPY static/ /usr/share/nginx/html/traefik/dashboard
+COPY nginx.conf.template /etc/nginx/nginx.conf
 RUN rm -rf /usr/share/nginx/html/index.html
-RUN ln -s /usr/share/nginx/html/traefik/index.html /usr/share/nginx/html/index.html
+RUN ln -s /usr/share/nginx/html/traefik/dashboard/index.html /usr/share/nginx/html/index.html
 EXPOSE 80
