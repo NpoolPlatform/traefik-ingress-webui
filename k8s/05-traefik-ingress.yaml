@@ -8,7 +8,7 @@ metadata:
     k8s.kuboard.cn/workload: traefik-admin
     nginx.com/sticky-cookie-services: "serviceName=traefik-admin srv_id expires=1h path=/"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /dashboard/$2
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - host: internal-devops.npool.top
