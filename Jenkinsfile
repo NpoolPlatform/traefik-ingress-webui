@@ -22,14 +22,14 @@ pipeline {
           sh 'cd traefik/webui; npm install'
           sh 'cd traefik/webui; NODE_ENV=production APP_ENV=production PLATFORM_URL=http://internal-devops.npool.top/traefik APP_API=http://internal-devops.npool.com/traefik APP_PUBLIC_PATH=traefik npm run build-quasar'
           sh 'mkdir -p .webui/static; cp traefik/webui/dist/spa/* .webui/static -rf'
-          sh 'cp Dockerfile.webui .webui'
+          sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh(returnStdout: true, script: '''#!/bin/sh
             sh 'docker images | grep "entropypool/traefik-webui"'
             if [ 0 -eq $? ]; then
               sh 'docker rmi entropypool/traefik-webui:v2.5.3'
             fi
           '''.stripIndent())
-          sh 'docker build -t entropypool/traefik-webui:v2.5.3 .'
+          sh 'cd .webui; docker build -t entropypool/traefik-webui:v2.5.3 .'
         }
       }
     }
