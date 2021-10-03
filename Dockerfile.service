@@ -1,6 +1,6 @@
 FROM centos:centos7.8.2003
-COPY script/ca-certificates.crt /etc/ssl/certs/
-COPY dist/traefik /
-EXPOSE 80
+COPY ca-certificates.crt /etc/ssl/certs/
+COPY traefik /usr/sbin
+EXPOSE 80 8080 4443
 VOLUME ["/tmp"]
-ENTRYPOINT ["/traefik"]
+ENTRYPOINT ["traefik"]
