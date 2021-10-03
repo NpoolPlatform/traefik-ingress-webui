@@ -16,26 +16,4 @@ spec:
       - path: /traefik/dashboard
         backend:
           serviceName: traefik-webui
-          servicePort: 80
-
----
-
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: traefik-whoami-ingress
-  namespace: kube-system
-  annotations:
-    k8s.kuboard.cn/displayName: traefik-whoami
-    k8s.kuboard.cn/workload: traefik-whoami
-    nginx.com/sticky-cookie-services: "serviceName=traefik-admin srv_id expires=1h path=/"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-spec:
-  rules:
-  - host: internal-devops.npool.top
-    http:
-      paths:
-      - path: /traefik/whoami
-        backend:
-          serviceName: traefik-whoami
-          servicePort: 80
+          servicePort: 8080

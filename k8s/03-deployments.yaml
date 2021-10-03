@@ -52,31 +52,6 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   namespace: kube-system
-  name: traefik-whoami
-  labels:
-    app: traefik-whoami
-
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: traefik-whoami
-  template:
-    metadata:
-      labels:
-        app: traefik-whoami
-    spec:
-      containers:
-        - name: traefik-whoami
-          image: traefik/whoami
-          ports:
-            - name: web
-              containerPort: 80
----
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  namespace: kube-system
   name: traefik-webui
   labels:
     app: traefik-webui
@@ -96,4 +71,4 @@ spec:
           image: entropypool/traefik-webui:v2.5.3
           ports:
             - name: web
-              containerPort: 80
+              containerPort: 8080
