@@ -22,7 +22,7 @@ pipeline {
         sh 'cd .traefik; make traefik-binary'
         sh 'mkdir -p .traefik-release'
         sh 'cp .traefik/dist/traefik .traefik-release'
-        sh 'cp .traefik/entrypoint.sh .traefik-release'
+        sh 'cp entrypoint.sh .traefik-release'
         sh 'cp .traefik/script/ca-certificates.crt .traefik-release'
         sh 'cp Dockerfile.service .traefik-release/Dockerfile'
         sh(returnStdout: true, script: '''#!/bin/sh
