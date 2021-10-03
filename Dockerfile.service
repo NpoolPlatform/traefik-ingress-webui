@@ -1,6 +1,23 @@
-FROM centos:centos7.8.2003
+FROM golang:1.17-alpine
+
+USER root
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
+
 COPY ca-certificates.crt /etc/ssl/certs/
 COPY traefik /usr/sbin
 EXPOSE 80 8080 4443
+
 VOLUME ["/tmp"]
-ENTRYPOINT ["traefik"]
+
+ENTRYPOINT ["/entrypoint.sh", "traefik"]
+CMD ["--api.insecure", \
+     "--accesslog", \
+     "--entrypoints.web.Address=:8000", \
+     "--entrypoints.websecure.Address=:4443", \
+     "--providers.kubernetescrd", \
+     "--certificatesresolvers.myresolver.acme.tlschallenge", \
+     "--certificatesresolvers.myresolver.acme.email=foo@you.com", \
+     "--certificatesresolvers.myresolver.acme.storage=acme.json", \
+     "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"]

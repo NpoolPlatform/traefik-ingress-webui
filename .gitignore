@@ -1,4 +1,4 @@
 .webui
 spa
 traefik
-.traefik
+.traefik*
