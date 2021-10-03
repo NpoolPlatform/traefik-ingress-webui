@@ -17,7 +17,7 @@ TRAEFIK_IMAGE := $(if $(REPONAME),$(REPONAME),"traefik/traefik")
 
 INTEGRATION_OPTS := $(if $(MAKE_DOCKER_HOST),-e "DOCKER_HOST=$(MAKE_DOCKER_HOST)", -e "TEST_CONTAINER=1" -v "/var/run/docker.sock:/var/run/docker.sock")
 DOCKER_BUILD_ARGS := $(if $(DOCKER_VERSION), "--build-arg=DOCKER_VERSION=$(DOCKER_VERSION)",)
-DOCKER_BUILD_ARGS += "--build-arg ALL_PROXY=${all_proxy}"
+DOCKER_BUILD_ARGS += "--build-arg=ALL_PROXY=${all_proxy}"
 
 TRAEFIK_ENVS := \
 	-e OS_ARCH_ARG \
