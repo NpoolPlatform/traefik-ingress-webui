@@ -15,13 +15,13 @@ pipeline {
 
     stage('Build traefik') {
       steps {
-        sh 'rm traefik -rf'
-        sh 'git clone https://github.com/traefik/traefik.git; cd traefik; git checkout v2.5.3'
+        sh 'rm .traefik -rf'
+        sh 'git clone https://github.com/traefik/traefik.git .traefik; cd .traefik; git checkout v2.5.3'
 
         nodejs('nodejs') {
-          sh 'cd traefik/webui; npm install'
-          sh 'cd traefik/webui; NODE_ENV=production APP_ENV=production PLATFORM_URL=http://internal-devops.npool.top/traefik/dashboard APP_API=http://internal-devops.npool.top/traefik/api APP_PUBLIC_PATH=traefik/dashboard npm run build-quasar'
-          sh 'mkdir -p .webui/static; cp traefik/webui/dist/spa/* .webui/static -rf'
+          sh 'cd .traefik/webui; npm install'
+          sh 'cd .traefik/webui; NODE_ENV=production APP_ENV=production PLATFORM_URL=http://internal-devops.npool.top/traefik/dashboard APP_API=http://internal-devops.npool.top/traefik/api APP_PUBLIC_PATH=traefik/dashboard npm run build-quasar'
+          sh 'mkdir -p .webui/static; cp .traefik/webui/dist/spa/* .webui/static -rf'
           sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh 'cp nginx.conf.template .webui/nginx.conf.template'
           sh(returnStdout: true, script: '''#!/bin/sh
