@@ -21,7 +21,7 @@ pipeline {
         sh 'cp build.Dockerfile.service .traefik/build.Dockerfile'
         sh 'cd .traefik; make traefik-binary'
         sh 'mkdir .traefik-release'
-        sh 'cp .traefik/dist/traefik .traefik-release'
+        sh 'cp .traefik/traefik .traefik-release'
         sh 'cp .traefik/script/ca-certificates.crt .traefik-release'
         sh 'cp Dockerfile.service .traefik-release'
         sh(returnStdout: true, script: '''#!/bin/sh

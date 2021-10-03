@@ -34,6 +34,7 @@ TRAEFIK_MOUNT := -v "$(CURDIR)/$(BIND_DIR):/go/src/github.com/traefik/traefik/$(
 DOCKER_RUN_OPTS := $(TRAEFIK_ENVS) $(TRAEFIK_MOUNT) "$(TRAEFIK_DEV_IMAGE)"
 DOCKER_NON_INTERACTIVE ?= false
 DOCKER_RUN_TRAEFIK := docker run --add-host=host.docker.internal:127.0.0.1 $(INTEGRATION_OPTS) $(if $(DOCKER_NON_INTERACTIVE), , -it) $(DOCKER_RUN_OPTS)
+DOCKER_BUILD_RUN_TRAEFIK := docker run --add-host=host.docker.internal:127.0.0.1 $(INTEGRATION_OPTS) $(if $(DOCKER_NON_INTERACTIVE), , -it) -e GO111MODULE=on -e GOPROXY=https://goproxy.cn,direct --name traefik-build-dev $(DOCKER_RUN_OPTS)
 DOCKER_RUN_TRAEFIK_NOTTY := docker run $(INTEGRATION_OPTS) $(if $(DOCKER_NON_INTERACTIVE), , -i) $(DOCKER_RUN_OPTS)
 
 PRE_TARGET ?= build-dev-image
@@ -60,12 +61,12 @@ build-webui-image:
 
 ## Generate WebUI
 generate-webui:
-	if [ ! -d "webui/static" ]; then \
+	if [ ! -d "static" ]; then \
 		$(MAKE) build-webui-image; \
-		mkdir -p webui/static; \
-		docker run --rm -v "$$PWD/webui/static":'/src/webui/static' traefik-webui npm run build:nc; \
-		docker run --rm -v "$$PWD/webui/static":'/src/webui/static' traefik-webui chown -R $(shell id -u):$(shell id -g) ./static; \
-		echo 'For more information show `webui/readme.md`' > $$PWD/webui/static/DONT-EDIT-FILES-IN-THIS-DIRECTORY.md; \
+		mkdir -p static; \
+		docker run --rm -v "$$PWD/static":'/src/static' traefik-webui npm run build:nc; \
+		docker run --rm -v "$$PWD/static":'/src/static' traefik-webui chown -R $(shell id -u):$(shell id -g) ../static; \
+		echo 'For more information show `webui/readme.md`' > $$PWD/static/DONT-EDIT-FILES-IN-THIS-DIRECTORY.md; \
 	fi
 
 ## Build the linux binary
@@ -73,7 +74,10 @@ binary: generate-webui $(PRE_TARGET)
 	$(if $(PRE_TARGET),$(DOCKER_RUN_TRAEFIK)) ./script/make.sh generate binary
 
 traefik-binary: $(PRE_TARGET)
-	$(if $(PRE_TARGET),$(DOCKER_RUN_TRAEFIK)) ./script/make.sh generate binary
+	$(if $(PRE_TARGET),$(DOCKER_BUILD_RUN_TRAEFIK)) go build -o /go/src/github.com/traefik/traefik/$(BIND_DIR)/traefik /go/src/github.com/traefik/traefik/cmd/traefik
+	docker cp traefik-build-dev:/go/src/github.com/traefik/traefik/$(BIND_DIR)/traefik ./dist/traefik
+	docker rm traefik-build-dev
+	docker rmi traefik-dev:HEAD
 
 ## Build the binary for the standard platforms (linux, darwin, windows)
 crossbinary-default: generate-webui build-dev-image
@@ -121,7 +125,7 @@ validate: $(PRE_TARGET)
 
 ## Clean up static directory and build a Docker Traefik image
 build-image: binary
-	rm -rf webui/static
+	rm -rf static
 	docker build -t $(TRAEFIK_IMAGE) .
 
 ## Build a Docker Traefik image
