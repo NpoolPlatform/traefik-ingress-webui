@@ -12,6 +12,10 @@ spec:
       port: 8000
       nodePort: 30180
     - protocol: TCP
+      name: admin
+      port: 8080
+      nodePort: 30280
+    - protocol: TCP
       name: websecure
       port: 4443
       nodePort: 30443
@@ -31,6 +35,6 @@ spec:
     - protocol: TCP
       name: web
       port: 80
-      nodePort: 30280
+      nodePort: 30080
   selector:
     app: traefik-webui
