@@ -30,7 +30,7 @@ spec:
   ports:
     - protocol: TCP
       name: web
-      port: 8080
+      port: 80
       nodePort: 30280
   selector:
     app: traefik-webui

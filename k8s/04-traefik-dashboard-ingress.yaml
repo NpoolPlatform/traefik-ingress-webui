@@ -16,4 +16,4 @@ spec:
       - path: /traefik/dashboard
         backend:
           serviceName: traefik-webui
-          servicePort: 8080
+          servicePort: 80

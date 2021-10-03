@@ -71,4 +71,4 @@ spec:
           image: entropypool/traefik-webui:v2.5.3
           ports:
             - name: web
-              containerPort: 8080
+              containerPort: 80

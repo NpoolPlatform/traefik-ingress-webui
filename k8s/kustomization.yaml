@@ -1,5 +1,5 @@
 commonLabels:
-  app: traefik-ingress
+  # app: traefik-ingress
 
 resources:
 - 01-ingress.yaml
