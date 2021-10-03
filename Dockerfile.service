@@ -16,7 +16,6 @@ CMD ["--api.insecure", \
      "--accesslog", \
      "--entrypoints.web.Address=:8000", \
      "--entrypoints.websecure.Address=:4443", \
-     "--entrypoints.admin.Address=:8080", \
      "--providers.kubernetescrd", \
      "--certificatesresolvers.myresolver.acme.tlschallenge", \
      "--certificatesresolvers.myresolver.acme.email=foo@you.com", \
