@@ -19,7 +19,7 @@ pipeline {
         sh 'git clone https://github.com/traefik/traefik.git .traefik; cd .traefik; git checkout v2.5.3'
         sh 'cp Makefile.service .traefik/Makefile'
         sh 'cp build.Dockerfile.service .traefik/build.Dockerfile'
-        sh 'cd .traefik; make binary'
+        sh 'cd .traefik; make traefik-binary'
         sh 'mkdir .traefik-release'
         sh 'cp .traefik/dist/traefik .traefik-release'
         sh 'cp .traefik/script/ca-certificates.crt .traefik-release'
