@@ -30,11 +30,9 @@ metadata:
   namespace: kube-system
 
 spec:
-  type: NodePort
   ports:
     - protocol: TCP
       name: web
       port: 80
-      nodePort: 30080
   selector:
     app: traefik-webui
