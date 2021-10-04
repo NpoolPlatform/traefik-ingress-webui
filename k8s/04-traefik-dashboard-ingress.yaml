@@ -9,6 +9,8 @@ metadata:
     nginx.com/sticky-cookie-services: "serviceName=traefik-admin srv_id expires=1h path=/"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     kubernetes.io/ingress.class: "devops-vpn-nginx-internal"
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
 spec:
   rules:
   - host: traefik-webui.internal-devops.development.npool.top
@@ -33,9 +35,11 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /api/$2
     kubernetes.io/ingress.class: "devops-vpn-nginx-internal"
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
 spec:
   rules:
-  - host: traefik-webui.internal-devops.development.npool.top
+  - host: traefik-api.internal-devops.development.npool.top
     http:
       paths:
       - path: /traefik/api(/|$)(.*)
