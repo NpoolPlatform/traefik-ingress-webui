@@ -55,9 +55,10 @@ pipeline {
         expression { DEPLOY_TARGET == true }
       }
       steps {
-        docker push entropypool/traefik-service:v2.5.3
-        docker push entropypool/traefik-webui:v2.5.3
-        kubectl apply -k k8s/
+        sh 'docker push entropypool/traefik-service:v2.5.3'
+        sh 'docker push entropypool/traefik-webui:v2.5.3'
+        sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
+        sh 'kubectl apply -k k8s/'
       }
     }
   }
