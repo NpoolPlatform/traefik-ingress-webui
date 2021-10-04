@@ -50,6 +50,16 @@ pipeline {
       }
     }
 
+    stage('Push docker image and deploy') {
+      when {
+        expression { DEPLOY_TARGET == true }
+      }
+      steps {
+        docker push entropypool/traefik-service:v2.5.3
+        docker push entropypool/traefik-webui:v2.5.3
+        kubectl apply -k k8s/
+      }
+    }
   }
   post('Report') {
     fixed {
