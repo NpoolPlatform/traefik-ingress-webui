@@ -40,7 +40,7 @@ pipeline {
           sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh 'cp nginx.conf.template .webui/nginx.conf.template'
           sh(returnStdout: true, script: '''
-            docker images | grep entropypool | traefik-webui
+            docker images | grep entropypool | grep traefik-webui
             if [ 0 -eq $? ]; then
               docker rmi entropypool/traefik-webui:v2.5.3
             fi
