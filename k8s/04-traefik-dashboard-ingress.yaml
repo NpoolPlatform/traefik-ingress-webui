@@ -8,6 +8,7 @@ metadata:
     k8s.kuboard.cn/workload: traefik-webui
     nginx.com/sticky-cookie-services: "serviceName=traefik-admin srv_id expires=1h path=/"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: "devops-vpn-nginx-internal"
 spec:
   rules:
   - host: internal-devops.npool.top
@@ -31,6 +32,7 @@ metadata:
     nginx.com/sticky-cookie-services: "serviceName=traefik-service srv_id expires=1h path=/"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /api/$2
+    kubernetes.io/ingress.class: "devops-vpn-nginx-internal"
 spec:
   rules:
   - host: internal-devops.npool.top
