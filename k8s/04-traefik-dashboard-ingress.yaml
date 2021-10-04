@@ -24,7 +24,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: traefik-service-ingress
+  name: traefik-admin-api-ingress
   namespace: kube-system
   annotations:
     k8s.kuboard.cn/displayName: traefik-service
