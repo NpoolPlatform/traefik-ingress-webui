@@ -26,7 +26,7 @@ pipeline {
         sh 'cp .traefik/script/ca-certificates.crt .traefik-release'
         sh 'cp Dockerfile.service .traefik-release/Dockerfile'
         sh(returnStdout: true, script: '''#!/bin/sh
-          sh 'docker images | grep "entropypool/traefik-service"'
+          sh 'docker images | grep entropypool | grep traefik-service'
           if [ 0 -eq $? ]; then
             sh 'docker rmi entropypool/traefik-service:v2.5.3'
           fi
@@ -40,7 +40,7 @@ pipeline {
           sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh 'cp nginx.conf.template .webui/nginx.conf.template'
           sh(returnStdout: true, script: '''#!/bin/sh
-            sh 'docker images | grep "entropypool/traefik-webui"'
+            sh 'docker images | grep entropypool | traefik-webui'
             if [ 0 -eq $? ]; then
               sh 'docker rmi entropypool/traefik-webui:v2.5.3'
             fi
@@ -52,7 +52,7 @@ pipeline {
 
     stage('Push docker image and deploy') {
       when {
-        expression { DEPLOY_TARGET == true }
+        expression { DEPLOY_TARGET == 'true' }
       }
       steps {
         sh 'docker push entropypool/traefik-service:v2.5.3'
