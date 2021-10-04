@@ -56,7 +56,7 @@ pipeline {
       }
       steps {
         sh 'sed -i "s/internal-devops.development.npool.top/internal-devops.$TARGET_ENV.npool.top/g" k8s/04-traefik-dashboard-ingress.yaml'
-        sh(returnStdout: true, script: '''#!/bin/sh
+        sh(returnStdout: true, script: '''
           while true; do
             docker push entropypool/traefik-service:v2.5.3
             if [ $? -eq 0 ]; then
