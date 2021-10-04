@@ -55,6 +55,7 @@ pipeline {
         expression { DEPLOY_TARGET == 'true' }
       }
       steps {
+        sh 'sed -i "s/internal-devops.development.npool.top/internal-devops.$TARGET_ENV.npool.top/g" k8s/04-traefik-dashboard-ingress.yaml'
         sh 'docker push entropypool/traefik-service:v2.5.3'
         sh 'docker push entropypool/traefik-webui:v2.5.3'
         sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
