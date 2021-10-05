@@ -50,12 +50,8 @@ pipeline {
       }
     }
 
-    stage('Push docker image and deploy') {
-      when {
-        expression { DEPLOY_TARGET == 'true' }
-      }
+    stage('Push docker image') {
       steps {
-        sh 'sed -i "s/internal-devops.development.npool.top/internal-devops.$TARGET_ENV.npool.top/g" k8s/04-traefik-dashboard-ingress.yaml'
         sh(returnStdout: true, script: '''
           while true; do
             docker push entropypool/traefik-service:v2.5.3
@@ -71,11 +67,21 @@ pipeline {
             fi
           done
         '''.stripIndent())
+      }
+    }
+
+    stage('Deploy traefik') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+      }
+      steps {
+        sh 'sed -i "s/internal-devops.development.npool.top/internal-devops.$TARGET_ENV.npool.top/g" k8s/04-traefik-dashboard-ingress.yaml'
         sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
         sh 'kubectl apply -k k8s/'
       }
-    }
+
   }
+
   post('Report') {
     fixed {
       script {
