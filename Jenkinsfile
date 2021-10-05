@@ -14,6 +14,9 @@ pipeline {
     }
 
     stage('Build traefik') {
+      when {
+        expression { BUILD_TARGET == 'true' }
+      }
       steps {
         sh 'rm .traefik -rf'
         sh 'git clone https://github.com/traefik/traefik.git .traefik; cd .traefik; git checkout v2.5.3'
@@ -45,12 +48,15 @@ pipeline {
               docker rmi entropypool/traefik-webui:v2.5.3
             fi
           '''.stripIndent())
-          sh 'cd .webui; docker build -t entropypool/traefik-webui:v2.5.3 .'
+          sh 'cd .webui; docker build -t entropypool/traefik-webui-$TARGET_ENV:v2.5.3 .'
         }
       }
     }
 
     stage('Push docker image') {
+      when {
+        expression { RELEASE_TARGET == 'true' }
+      }
       steps {
         sh(returnStdout: true, script: '''
           while true; do
@@ -61,7 +67,7 @@ pipeline {
           done
         
           while true; do
-            docker push entropypool/traefik-webui:v2.5.3
+            docker push entropypool/traefik-webui-$TARGET_ENV:v2.5.3
             if [ $? -eq 0 ]; then
               break
             fi
@@ -76,6 +82,7 @@ pipeline {
       }
       steps {
         sh 'sed -i "s/internal-devops.development.npool.top/internal-devops.$TARGET_ENV.npool.top/g" k8s/04-traefik-dashboard-ingress.yaml'
+        sh 'sed -i "s/traefik-webui:v2.5.3/traefik-webui-$TARGET_ENV:v2.5.3/g" k8s/03-deployments.yaml'
         sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
         sh 'kubectl apply -k k8s/'
       }
