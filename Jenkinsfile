@@ -29,8 +29,11 @@ pipeline {
         sh 'cp .traefik/script/ca-certificates.crt .traefik-release'
         sh 'cp Dockerfile.service .traefik-release/Dockerfile'
         sh(returnStdout: true, script: '''
+          set +e
           docker images | grep entropypool | grep traefik-service
-          if [ 0 -eq $? ]; then
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
             docker rmi entropypool/traefik-service:v2.5.3
           fi
         '''.stripIndent())
@@ -43,9 +46,12 @@ pipeline {
           sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh 'cp nginx.conf.template .webui/nginx.conf.template'
           sh(returnStdout: true, script: '''
-            docker images | grep entropypool | grep traefik-webui
-            if [ 0 -eq $? ]; then
-              docker rmi entropypool/traefik-webui:v2.5.3
+            set +e
+            docker images | grep entropypool | grep traefik-webui-$TARGET_ENV
+            rc=$?
+            set -e
+            if [ 0 -eq $rc ]; then
+              docker rmi entropypool/traefik-webui-$TARGET_ENV:v2.5.3
             fi
           '''.stripIndent())
           sh 'cd .webui; docker build -t entropypool/traefik-webui-$TARGET_ENV:v2.5.3 .'
