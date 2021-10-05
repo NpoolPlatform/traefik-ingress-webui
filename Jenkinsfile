@@ -79,6 +79,7 @@ pipeline {
         sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
         sh 'kubectl apply -k k8s/'
       }
+    }
 
   }
 
