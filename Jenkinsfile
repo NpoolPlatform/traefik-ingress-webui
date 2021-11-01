@@ -44,7 +44,7 @@ pipeline {
           sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh 'cp nginx.conf.template .webui/nginx.conf.template'
           sh(returnStdout: true, script: '''
-            images=`docker images | grep entropypool | grep traefik-webui-$TARGET_ENV`
+            images=`docker images | grep entropypool | grep traefik-webui`
             for image in $images; do
               docker rmi $image
             done
