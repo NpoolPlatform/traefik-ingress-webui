@@ -102,7 +102,7 @@ pipeline {
      }
     failure {
       script {
-        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV env.JOB_NAME')
+        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV scm.userRemoteConfigs[0].url')
      }
       script {
         // env.ForEmailPlugin = env.WORKSPACE
