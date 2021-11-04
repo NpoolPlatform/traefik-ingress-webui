@@ -18,8 +18,6 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       
-        sh 'cd .traefik-release; docker build -t entropypool/traefik-service:v2.5.3 .'
-
         nodejs('nodejs') {
           sh 'cd .traefik/webui; npm install'
           sh 'cd .traefik/webui; NODE_ENV=production APP_ENV=production PLATFORM_URL=http://traefik-webui.internal-devops.$TARGET_ENV.npool.top/traefik/dashboard APP_API=http://traefik-api.internal-devops.$TARGET_ENV.npool.top/traefik/api APP_PUBLIC_PATH=traefik/dashboard npm run build-quasar'
