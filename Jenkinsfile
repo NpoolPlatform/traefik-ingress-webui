@@ -102,7 +102,11 @@ pipeline {
      }
     failure {
       script {
-        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV scm.userRemoteConfigs[0].url')
+        sh(returnStdout: true, script: '''
+          remoteurl=`git remote -v | grep fetch | awk '{ print $2 }'`
+          projectname=`basename $remoteurl`
+          bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV projectname
+        '''.stripIndent())
      }
       script {
         // env.ForEmailPlugin = env.WORKSPACE
