@@ -74,13 +74,6 @@ pipeline {
   }
 
   post('Report') {
-    script {
-      sh(returnStdout: true, script: '''
-        remoteurl=`git remote -v | grep fetch | awk '{ print $2 }'`
-        projectname=`basename $remoteurl`
-      '''.stripIndent())
-    }
-    
     fixed {
       script {
         sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh fixed')
@@ -110,6 +103,8 @@ pipeline {
     failure {
       script {
         sh(returnStdout: true, script: '''
+          remoteurl=`git remote -v | grep fetch | awk '{ print $2 }'`
+          projectname=`basename $remoteurl`
           bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV $projectname
         '''.stripIndent())
      }
