@@ -105,7 +105,7 @@ pipeline {
         sh(returnStdout: true, script: '''
           remoteurl=`git remote -v | grep fetch | awk '{ print $2 }'`
           projectname=`basename $remoteurl`
-          bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV projectname
+          bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure $TARGET_ENV $projectname
         '''.stripIndent())
      }
       script {
