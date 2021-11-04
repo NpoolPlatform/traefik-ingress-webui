@@ -17,24 +17,7 @@ pipeline {
       when {
         expression { BUILD_TARGET == 'true' }
       }
-      steps {
-        sh 'rm .traefik -rf'
-        sh 'git clone https://github.com/traefik/traefik.git .traefik; cd .traefik; git checkout v2.5.3'
-        sh 'cp Makefile.service .traefik/Makefile'
-        sh 'cp build.Dockerfile.service .traefik/build.Dockerfile'
-        sh 'cd .traefik; make traefik-binary'
-        sh 'mkdir -p .traefik-release'
-        sh 'cp .traefik/dist/traefik .traefik-release'
-        sh 'cp entrypoint.sh .traefik-release'
-        sh 'cp .traefik/script/ca-certificates.crt .traefik-release'
-        sh 'cp Dockerfile.service .traefik-release/Dockerfile'
-        sh(returnStdout: true, script: '''
-          images=`docker images | grep entropypool | grep traefik-service | awk '{ print $3 }'`
-          for image in $images; do
-            docker rmi $image
-          done
-        '''.stripIndent())
-
+      
         sh 'cd .traefik-release; docker build -t entropypool/traefik-service:v2.5.3 .'
 
         nodejs('nodejs') {
@@ -44,7 +27,7 @@ pipeline {
           sh 'cp Dockerfile.webui .webui/Dockerfile'
           sh 'cp nginx.conf.template .webui/nginx.conf.template'
           sh(returnStdout: true, script: '''
-            images=`docker images | grep entropypool | grep traefik-webui | awk '{ print $3 }'`
+            images=`docker images | grep entropypool | grep traefik-webui | grep $TARGET_ENV | awk '{ print $3 }'`
             for image in $images; do
               docker rmi $image
             done
