@@ -21,6 +21,7 @@ pipeline {
       steps {
         sh 'rm .traefik -rf'
         sh 'git clone https://github.com/traefik/traefik.git .traefik; cd .traefik; git checkout v2.5.3'
+        sh 'cp Makefile.service .traefik/Makefile'
         
         nodejs('nodejs') {
           sh 'cd .traefik/webui; npm install'
