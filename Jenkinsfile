@@ -48,14 +48,7 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
-          while true; do
-            docker push entropypool/traefik-service:v2.5.3
-            if [ $? -eq 0 ]; then
-              break
-            fi
-          done
-        
+        sh(returnStdout: true, script: '''      
           while true; do
             docker push entropypool/traefik-webui-$TARGET_ENV:v2.5.3
             if [ $? -eq 0 ]; then
