@@ -25,8 +25,8 @@ pipeline {
         nodejs('nodejs') {
           sh 'mkdir -p /root/.npm/node-sass/4.12.0/'
           sh 'mkdir -p /root/.npm/node-sass/4.13.0/'
-          sh 'curl -sL http://106.14.125.55:8888/linux-x64-72_binding.node /root/.npm/node-sass/4.12.0/linux-x64-72_binding.node'
-          sh 'curl -sL http://106.14.125.55:8888/linux-x64-72_binding.node /root/.npm/node-sass/4.13.0/linux-x64-72_binding.node'
+          sh 'curl -sL http://106.14.125.55:8888/linux-x64-72_binding.node -o /root/.npm/node-sass/4.12.0/linux-x64-72_binding.node'
+          sh 'curl -sL http://106.14.125.55:8888/linux-x64-72_binding.node -o /root/.npm/node-sass/4.13.0/linux-x64-72_binding.node'
           sh 'cd .traefik/webui; npm install'
           sh 'cd .traefik/webui; NODE_ENV=production APP_ENV=production PLATFORM_URL=http://traefik-webui.internal-devops.$TARGET_ENV.npool.top/traefik/dashboard APP_API=http://traefik-api.internal-devops.$TARGET_ENV.npool.top/traefik/api APP_PUBLIC_PATH=traefik/dashboard npm run build-quasar'
           sh 'mkdir -p .webui/static; cp .traefik/webui/dist/spa/* .webui/static -rf'
